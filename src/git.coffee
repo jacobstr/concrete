@@ -63,6 +63,15 @@ git = module.exports =
                     jobs.updateLog jobs.current, out, ->
                         console.log out.grey
                         next()
+    
+    lastCommit: (callback) ->
+      exec "git log --pretty=format:'%h:::%s:::%ad' -n 1", (err,stdo,stderr) =>
+        p = "#{stdo}".replace(/(\n|\r)+$/, '').split(':::')
+        commit =
+          sha: p[0]
+          message: p[1]
+          time: new Date(Date.parse(p[2]))
+        callback(commit)
 
 getUser = ->
     exec 'git config --get ' + git.config.user, (error, stdout, stderr)=>
