@@ -1,5 +1,6 @@
 mongo = require 'mongodb'
 path = require 'path'
+git = require './git'
 db = new mongo.Db "concrete_#{path.basename process.cwd()}", new mongo.Server('localhost', mongo.Connection.DEFAULT_PORT, {auto_reconnect: true}), {}
 db.open (error) ->
     if error
@@ -85,6 +86,9 @@ jobs = module.exports =
                 job.running = yes
                 job.startedTime = new Date().getTime()
                 jobs.current = job._id.toString()
+                git.lastCommit (commit) ->
+                  job.commit = commit
+                  collection.save(job)
                 collection.save(job)
                 next()
 
