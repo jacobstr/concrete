@@ -5,6 +5,7 @@ path = require 'path'
 runner = require './runner'
 jobs = require './jobs'
 git = require './git'
+moment = require 'moment'
 
 authorize = (user, pass) ->
     user == git.user and pass == git.pass
@@ -50,7 +51,8 @@ app.get '/', (req, res) ->
     jobs.getAll (jobs)->
         res.render 'index',
             project: path.basename process.cwd()
-            jobs: jobs
+            jobs: jobs,
+            moment: moment
 
 app.get '/jobs', (req, res) ->
     jobs.getAll (jobs)->
