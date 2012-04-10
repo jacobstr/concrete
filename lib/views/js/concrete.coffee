@@ -60,3 +60,15 @@ $(document).ready ->
 
     $('li.job').each (iterator, job)->
         addClick job
+
+    #Hide duplicate date strings
+    do ->
+      lastText = ''
+      $('.day').each (iterator,dateDiv) ->
+        $dateDiv = $ dateDiv
+        if lastText == $dateDiv.text()
+          $dateDiv.hide()
+        else
+          lastText = $dateDiv.text()
+
+      
