@@ -79,6 +79,12 @@ jobs = module.exports =
                 job.finishedTime = new Date().getTime()
                 jobs.current = null
                 collection.save(job)
+
+                if job.failed
+                  git.addNote job.commit.sha, "✖ CI FAILED at: #{job.commit.time}"
+                else
+                  git.addNote job.commit.sha, "✔ CI PASSED at: #{job.commit.time}"
+
                 next()
 
     next: (next)->

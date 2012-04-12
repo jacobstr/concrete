@@ -73,6 +73,9 @@ git = module.exports =
           time: new Date(Date.parse(p[2]))
         callback(commit)
 
+    addNote: (sha, message) ->
+      exec "git notes --ref=ci add -f -m \"#{message}\" #{sha}", (err,stdo,stderr) =>
+        #swallow
 getUser = ->
     exec 'git config --get ' + git.config.user, (error, stdout, stderr)=>
         if error?
