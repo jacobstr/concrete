@@ -1,4 +1,4 @@
-$(document).ready ->
+$ ->
     addClick = (job)->
         $(job).click (event)->
             alreadyOpened = $(event.currentTarget).find('div.job_container').hasClass 'open'
@@ -14,7 +14,7 @@ $(document).ready ->
             $(job).find('.job_container').first().html(data.log)
             if data.finished
                 $(job).find('a img.loader').remove()
-                $(job).find('a').first().append CoffeeKup.render outcomeTemplate, job: data
+                $(CoffeeKup.render outcomeTemplate, job: data).insertBefore $(job).find('.job_id')
                 $('button.build').show()
                 return false
             setTimeout ->
@@ -29,11 +29,18 @@ $(document).ready ->
 
     jobTemplate = ->
         li '.job', ->
+            d = moment(@job.addedTime)
+            day_time = d.calendar().split(' at ')
+            div '.day', -> "#{day_time[0]}"
             a href: "/job/#{@job._id.toString()}", ->
-                d = new Date(@job.addedTime)
-                div '.time', -> "#{d.toDateString()} #{d.toTimeString()}"
-                div '.job_id', -> "#{@job._id.toString()}"
+                div '.time', -> "#{day_time[1]}"
+                if commit=@job.commit
+                    div '.commit_details', ->
+                        span '.commit-sha', -> ''+commit.sha+' '
+                        span '.commit-message', -> commit.message
+                        span '.commit-time', -> " ("+moment(commit.time).fromNow()+")"
                 img '.loader', src:'images/spinner.gif'
+                div '.job_id', -> "#{@job._id.toString()}"
             div '.job_container', ->
                 @job.log
 
@@ -54,6 +61,7 @@ $(document).ready ->
             job = $(job).find('li').first()
             addClick job
             updateJob job
+            hideDuplicateMonthTags()
             $(job).find('.job_container').click()
         , 'json'
         return false
@@ -62,7 +70,7 @@ $(document).ready ->
         addClick job
 
     #Hide duplicate date strings
-    do ->
+    hideDuplicateMonthTags = ->
       lastText = ''
       $('.day').each (iterator,dateDiv) ->
         $dateDiv = $ dateDiv
@@ -70,5 +78,5 @@ $(document).ready ->
           $dateDiv.hide()
         else
           lastText = $dateDiv.text()
-
-      
+    hideDuplicateMonthTags()
+  
