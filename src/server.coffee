@@ -6,6 +6,7 @@ runner = require './runner'
 jobs = require './jobs'
 git = require './git'
 moment = require 'moment'
+stats = require './stats'
 
 authorize = (user, pass) ->
     user == git.user and pass == git.pass
@@ -53,6 +54,9 @@ app.get '/', (req, res) ->
             project: path.basename process.cwd()
             jobs: jobs,
             moment: moment
+app.get '/stats', (req, res) ->
+    res.render 'stats',
+            project: path.basename process.cwd()
 
 app.get '/jobs', (req, res) ->
     jobs.getAll (jobs)->
@@ -93,3 +97,11 @@ app.post '/', (req, res) ->
             res.json job
         else
             res.redirect '/'
+
+app.get '/stats/build-time', (req,res) ->
+  stats.buildTime (builds) ->
+    res.json builds
+
+app.get '/stats/number-of-tests', (req,res) ->
+  stats.numberOfTests (n) ->
+    res.json n

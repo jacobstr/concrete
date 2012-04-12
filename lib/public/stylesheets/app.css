@@ -28,4 +28,10 @@ li.job a .time{font:13px 'Monaco',courier,'courier new',monospace;float:left;mar
 li.job a:hover{background-color:#eaeaea}
 li.job .job_container{display:none;width:920px;padding:20px;background-color:#333;font:13px 'Monaco',courier,'courier new',monospace;color:#777;}
 li.job .job_container span.output{color:#ddd}
-nav{float:right}
+nav a{display:block;float:left;font-size:1.5em;text-decoration:none;color:#999;margin-left:10px;}
+nav a:first-child{margin-left:20px}
+nav a:hover{text-decoration:underline;color:#888}
+nav a.active{color:#666}
+nav form{float:right}
+#stats{margin-top:40px;}
+#stats .stat-chart{background-color:#eee;border-bottom:1px #ddd solid;border-top:1px #ddd solid;margin-top:10px}

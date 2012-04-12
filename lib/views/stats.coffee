@@ -8,7 +8,8 @@ html ->
         script src: 'js/jquery-1.6.2.min.js'
         script src: 'js/coffeekup.js'
         script src: 'js/moment.min.js'
-        script src: 'concrete.js'
+        script src: 'http://www.google.com/jsapi', type: 'text/javascript'
+        script src: 'stats.js'
 
     body ->
         header ->
@@ -16,16 +17,10 @@ html ->
                 h1 'CONCRETE'
                 h2 '.project', -> @project
                 nav ->
-                    a href: '/', class: 'active', 'Builds'
-                    a href: '/stats', 'Stats'
+                    a href: '/', 'Builds'
+                    a href: '/stats', class: 'active', 'Stats'
                     form method: 'post', action: '/', ->
                         button '.build', -> 'Build'
 
         div '#content', ->
-            ul '.jobs', ->
-                if @jobs.length is 0
-                    li '.nojob', -> 'No jobs have been submitted.'
-                for i in [@jobs.length - 1..0] by -1
-                    @job = @jobs[i]
-                    partial 'jobPartial'
-
+          div '#stats', ->
