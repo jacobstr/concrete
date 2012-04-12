@@ -17,8 +17,10 @@ jobs = module.exports =
                 log: ''
                 running: no
                 finished: no
-            collection.insert job
-            next(job) if next?
+            git.lastCommit (commit) ->
+              job.commit = commit
+              collection.insert job
+              next(job) if next?
 
     getQueued: (next)->
         getJobs {running: no}, next
@@ -86,9 +88,6 @@ jobs = module.exports =
                 job.running = yes
                 job.startedTime = new Date().getTime()
                 jobs.current = job._id.toString()
-                git.lastCommit (commit) ->
-                  job.commit = commit
-                  collection.save(job)
                 collection.save(job)
                 next()
 
