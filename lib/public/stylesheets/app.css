@@ -12,8 +12,14 @@ ul{list-style-type:none;margin:40px 0;padding:0}
 code pre{font:13px 'Monaco',courier,'courier new',monospace;}
 code pre span.bold{font-weight:bold}
 code pre span.underscore{text-decoration:underscore}
-code pre span.fg-red{color:#dc322f}
-code pre span.fg-green{color:#859900}
+code pre span.fg-black{color:#34352e}
+code pre span.fg-red{color:#e72970}
+code pre span.fg-green{color:#b5e247}
+code pre span.fg-yellow{color:#eae262}
+code pre span.fg-blue{color:#58bcf8}
+code pre span.fg-magenta{color:#b58cfd}
+code pre span.fg-cyan{color:#60ddef}
+code pre span.fg-white{color:#60ddef}
 li.job{position:relative;}
 li.job .day{position:absolute;width:70px;left:-80px;padding:5px;font-weight:bold;color:#f2f2f2;background:#a30e0e}
 li.job:last-child a{border-bottom:1px solid #e6e6e6}
