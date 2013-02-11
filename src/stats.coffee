@@ -15,7 +15,7 @@ stats = module.exports =
   numberOfTests: (callback) ->
     jobs.getAll (jobs) ->
       callback jobs.map (j) ->
-        re = /(\d+) examples,/
+        re = /(\d+) tests complete/
         match = re.exec(j.log)
         count = if match
                   parseInt(match[1])
