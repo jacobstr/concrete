@@ -6,3 +6,10 @@ task 'build', 'Compile CoffeeScript files', (options)->
     coffee.stdout.on 'data', (data) -> print data.toString()
     coffee.stderr.on 'data', (data) -> print data.toString()
     coffee.on 'exit', (status) -> callback?() if status is 0
+
+task 'build2', 'Compile CoffeeScript files', (options)->
+    options = ['-c', '-o', 'lib/public', 'lib/views/js']
+    coffee = spawn 'coffee', options
+    coffee.stdout.on 'data', (data) -> print data.toString()
+    coffee.stderr.on 'data', (data) -> print data.toString()
+    coffee.on 'exit', (status) -> callback?() if status is 0
