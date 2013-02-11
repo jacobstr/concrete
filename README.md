@@ -7,7 +7,7 @@ Concrete is a minimalistic Continuous Integration server.
     git clone https://github.com/edy-b/concrete.git /path/to/concrete
     cd /path/to/concrete
     npm install
-    cake build && cake build2
+    cake build
     cd yourrepository
     git config --add concrete.runner "shell command"
     /path/to/concrete/bin/concrete .
