@@ -49,7 +49,7 @@ app.configure 'production', ->
     app.use express.errorHandler dumpExceptions: on, showStack: on
 
 app.get '/', (req, res) ->
-    jobs.getAll (jobs)->
+    jobs.getLatest (jobs)->
         res.render 'index',
             project: path.basename process.cwd()
             jobs: jobs,

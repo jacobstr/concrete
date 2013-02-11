@@ -31,6 +31,14 @@ jobs = module.exports =
     getAll: (next)->
         getJobs null, next
 
+    getLatest: (next)->
+        db.collection 'jobs', (error, collection) ->
+            collection.find().limit(50).toArray (error, jobs) ->
+                if jobs.length > 0
+                    next jobs
+                else
+                    next()
+
     getLast: (next)->
         db.collection 'jobs', (error, collection) ->
             collection.find().sort({$natural:-1}).limit(1).toArray (error, jobs) ->
