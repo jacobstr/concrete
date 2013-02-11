@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "colors": "0.6.x",
-    "coffee-script": "1.2.x",
+    "coffee-script": "1.4.x",
     "optimist": "0.3.x",
     "express": "2.x",
     "stylus": "0.x",
     "coffeekup": "0.3.x",
-    "mongodb": "0.9.x",
-    "moment": "1.5.x"
+    "mongodb": "1.2.x",
+    "moment": "2.0.x"
   },
   "engines": {
     "node": ">=0.4.9"

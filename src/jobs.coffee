@@ -1,7 +1,7 @@
 mongo = require 'mongodb'
 path = require 'path'
 git = require './git'
-db = new mongo.Db "concrete_#{path.basename(process.cwd()).replace(/\./, "-")}", new mongo.Server('localhost', mongo.Connection.DEFAULT_PORT, {auto_reconnect: true}), {}
+db = new mongo.Db "concrete_#{path.basename(process.cwd()).replace(/\./, "-")}", new mongo.Server('localhost', mongo.Connection.DEFAULT_PORT, {auto_reconnect: true}), {safe:true}
 db.open (error) ->
     if error
       console.log 'There was an error creating a connection with the Mongo database. Please check that MongoDB is properly installed and running.'.red
@@ -19,8 +19,8 @@ jobs = module.exports =
                 finished: no
             git.lastCommit (commit) ->
               job.commit = commit
-              collection.insert job
-              next(job) if next?
+              collection.insert job, ->
+                next(job) if next?
 
     getQueued: (next)->
         getJobs {running: no}, next
@@ -74,8 +74,8 @@ jobs = module.exports =
                 console.log "update log for job #{job}, #{string}"
                 return no if not job?
                 job.log += "#{string} <br />"
-                collection.save(job)
-                next() if next?
+                collection.save job, ->
+                    next() if next?
 
     currentComplete: (success, next)->
         db.collection 'jobs', (error, collection) ->
@@ -86,14 +86,13 @@ jobs = module.exports =
                 job.failed = not success
                 job.finishedTime = new Date().getTime()
                 jobs.current = null
-                collection.save(job)
+                collection.save job, ->
+                    if job.failed
+                      git.addNote job.commit.sha, "✖ CI FAILED at: #{job.commit.time}"
+                    else
+                      git.addNote job.commit.sha, "✔ CI PASSED at: #{job.commit.time}"
 
-                if job.failed
-                  git.addNote job.commit.sha, "✖ CI FAILED at: #{job.commit.time}"
-                else
-                  git.addNote job.commit.sha, "✔ CI PASSED at: #{job.commit.time}"
-
-                next()
+                    next()
 
     next: (next)->
         db.collection 'jobs', (error, collection) ->
@@ -102,8 +101,8 @@ jobs = module.exports =
                 job.running = yes
                 job.startedTime = new Date().getTime()
                 jobs.current = job._id.toString()
-                collection.save(job)
-                next()
+                collection.save job, ->
+                    next()
 
 getJobs = (filter, next)->
     db.collection 'jobs', (error, collection) ->
