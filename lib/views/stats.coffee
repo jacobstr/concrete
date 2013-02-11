@@ -19,8 +19,6 @@ html ->
                 nav ->
                     a href: '/', 'Builds'
                     a href: '/stats', class: 'active', 'Stats'
-                    form method: 'post', action: '/', ->
-                        button '.build', -> 'Build'
 
         div '#content', ->
           div '#stats', ->
