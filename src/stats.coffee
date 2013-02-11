@@ -5,7 +5,7 @@ stats = module.exports =
   
   #calls the callback with an array of jobs with date and build time
   buildTime: (callback) ->
-    jobs.getAll (jobs) ->
+    jobs.getLatest (jobs) ->
       callback jobs.map (j) ->
         {
           runAt: j.startedTime
@@ -13,7 +13,7 @@ stats = module.exports =
         }
 
   numberOfTests: (callback) ->
-    jobs.getAll (jobs) ->
+    jobs.getLatest (jobs) ->
       callback jobs.map (j) ->
         re = /(\d+) tests complete/
         match = re.exec(j.log)
