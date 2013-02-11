@@ -33,7 +33,7 @@ jobs = module.exports =
 
     getLatest: (next)->
         db.collection 'jobs', (error, collection) ->
-            collection.find().limit(50).toArray (error, jobs) ->
+            collection.find().sort({addedTime: 1}).limit(50).toArray (error, jobs) ->
                 if jobs.length > 0
                     next jobs
                 else
