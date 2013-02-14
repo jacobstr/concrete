@@ -15,18 +15,18 @@ jobs = module.exports =
             job =
                 addedTime: new Date().getTime()
                 log: ''
-                running: no
-                finished: no
+                running: false
+                finished: false
             git.lastCommit (commit) ->
               job.commit = commit
               collection.insert job, ->
                 next(job) if next?
 
     getQueued: (next)->
-        getJobs {running: no}, next
+        getJobs {running: false}, next
 
     getRunning: (next)->
-        getJobs {running: yes}, next
+        getJobs {running: true}, next
 
     getAll: (next)->
         getJobs null, next
@@ -69,7 +69,7 @@ jobs = module.exports =
         db.collection 'jobs', (error, collection) ->
             collection.findOne {_id: new ObjectID id}, (error, job) ->
                 console.log "update log for job #{job}, #{string}"
-                return no if not job?
+                return false if not job?
                 job.log += "#{string} <br />"
                 collection.save job, ->
                     next() if next?
@@ -77,9 +77,9 @@ jobs = module.exports =
     currentComplete: (success, next)->
         db.collection 'jobs', (error, collection) ->
             collection.findOne {_id: new ObjectID jobs.current}, (error, job) ->
-                return no if not job?
-                job.running = no
-                job.finished = yes
+                return false if not job?
+                job.running = false
+                job.finished = true
                 job.failed = not success
                 job.finishedTime = new Date().getTime()
                 jobs.current = null
@@ -93,9 +93,9 @@ jobs = module.exports =
 
     next: (next)->
         db.collection 'jobs', (error, collection) ->
-            collection.findOne {running: no, finished: no}, (error, job) ->
-                return no if not job?
-                job.running = yes
+            collection.findOne {running: false, finished: false}, (error, job) ->
+                return false if not job?
+                job.running = true
                 job.startedTime = new Date().getTime()
                 jobs.current = job._id.toString()
                 collection.save job, ->

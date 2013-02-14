@@ -18,7 +18,7 @@ else
 
 app.configure ->
     app.set 'views', __dirname + '/views'
-    app.set 'quiet', yes
+    app.set 'quiet', true
     # use coffeekup for html markup
     app.set 'view engine', 'coffee'
     app.register '.coffee', require('coffeekup').adapters.express
@@ -43,10 +43,10 @@ app.configure ->
     app.use express.static __dirname + '/public'
 
 app.configure 'development', ->
-    app.use express.errorHandler dumpExceptions: on, showStack: on
+    app.use express.errorHandler dumpExceptions: true, showStack: true
 
 app.configure 'production', ->
-    app.use express.errorHandler dumpExceptions: on, showStack: on
+    app.use express.errorHandler dumpExceptions: true, showStack: true
 
 app.get '/', (req, res) ->
     jobs.getLatest (jobs)->

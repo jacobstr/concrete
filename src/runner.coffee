@@ -45,7 +45,7 @@ runner = module.exports =
         runNextJob()
 
 runNextJob = ->
-    return no if jobs.current?
+    return false if jobs.current?
     jobs.next ->
         git.pull ->
             runTask (success)->
@@ -59,10 +59,10 @@ runTask = (next)->
             updateLog error, true, ->
                 updateLog stdout, false, ->
                     updateLog stderr, true, ->
-                        runFile git.failure, next, no
+                        runFile git.failure, next, false
         else
             updateLog stdout, false, ->
-                runFile git.success, next, yes
+                runFile git.success, next, true
 
 runFile = (file, next, args=null) ->
     fs.exists file, (exists) ->

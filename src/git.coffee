@@ -39,7 +39,7 @@ git = module.exports =
 
         # make sure the path exists and is a valid repo
         fs.exists git.target, (exists)->
-            if exists is no
+            if exists is false
                 console.log "'#{target}' is not a valid Git repo".red
                 process.exit 1
             getUser()
@@ -119,11 +119,11 @@ gitContinue = ->
     if git.branch is 'none'
         git.branch = 'master'
     else if git.branch is ''
-        return no
+        return false
 
     if git.runner is 'none'
         console.log 'Git.gitContinue: You must specify a Git runner'.red
         process.exit 1
     else if git.runner is ''
-        return no
+        return false
     readyCallback()
