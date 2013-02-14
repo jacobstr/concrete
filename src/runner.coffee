@@ -57,12 +57,12 @@ runTask = (next)->
     exec git.runner,{maxBuffer: 1024*1024}, (error, stdout, stderr)=>
         if error?
             updateLog error, true, ->
-                updateLog stdout, true, ->
+                updateLog stdout, false, ->
                     updateLog stderr, true, ->
                         runFile git.failure, next, no
         else
-            updateLog stdout, true, ->
-                runFile git.success, next, yes
+            updateLog stdout, false, ->
+                runFile git.success, next, true
 
 runFile = (file, next, args=null) ->
     fs.exists file, (exists) ->
@@ -72,11 +72,11 @@ runFile = (file, next, args=null) ->
                 exec file, (error, stdout, stderr)=>
                     if error?
                         updateLog error, true, ->
-                            updateLog stdout, true, ->
+                            updateLog stdout, false, ->
                                 updateLog stderr, true, ->
                                     next(args)
                     else
-                        updateLog stdout, true, ->
+                        updateLog stdout, false, ->
                             next(args)
 
 updateLog = (buffer, isError, done) ->
