@@ -5,7 +5,7 @@ server = require './server'
 exec = require('child_process').exec
 mongo = require 'mongodb'
 jobs = require './jobs'
-
+fs = require 'fs'
 
 parseSequence = (input) ->
   length = input.length
@@ -65,17 +65,19 @@ runTask = (next)->
                 runFile git.success, next, yes
 
 runFile = (file, next, args=null) ->
-    jobs.updateLog jobs.current, "Executing #{file}", ->
-        console.log "Executing #{file}".grey
-        exec file, (error, stdout, stderr)=>
-            if error?
-                updateLog error, true, ->
-                    updateLog stdout, true, ->
-                        updateLog stderr, true, ->
+    fs.exists file, (exists) ->
+        if exists
+            jobs.updateLog jobs.current, "Executing #{file}", ->
+                console.log "Executing #{file}".grey
+                exec file, (error, stdout, stderr)=>
+                    if error?
+                        updateLog error, true, ->
+                            updateLog stdout, true, ->
+                                updateLog stderr, true, ->
+                                    next(args)
+                    else
+                        updateLog stdout, true, ->
                             next(args)
-            else
-                updateLog stdout, true, ->
-                    next(args)
 
 updateLog = (buffer, isError, done) ->
     content = html tokenize buffer.toString()
