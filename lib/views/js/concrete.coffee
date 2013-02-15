@@ -14,7 +14,7 @@ $ ->
             $(job).find('.job_container').first().html(data.log)
             if data.finished
                 $(job).find('a img.loader').remove()
-                $(CoffeeKup.render outcomeTemplate, job: data).insertBefore $(job).find('.job_id')
+                $(coffeecup.render outcomeTemplate, job: data).insertBefore $(job).find('.job_id')
                 $('button.build').show()
                 return false
             setTimeout ->
@@ -57,7 +57,7 @@ $ ->
         $.post '/', (data) ->
             if $('ul.jobs').find('li.nojob').length > 0
                $('ul.jobs').find('li.nojob').first().remove()
-            job = $('ul.jobs').prepend CoffeeKup.render jobTemplate, job: data
+            job = $('ul.jobs').prepend coffeecup.render jobTemplate, job: data
             job = $(job).find('li').first()
             addClick job
             updateJob job

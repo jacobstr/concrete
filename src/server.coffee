@@ -12,16 +12,16 @@ authorize = (user, pass) ->
     user == git.user and pass == git.pass
 
 if git.user and git.pass
-    app = module.exports = express.createServer(express.basicAuth(authorize))
+    app = module.exports = express(express.basicAuth(authorize))
 else
-    app = module.exports = express.createServer()
+    app = module.exports = express()
 
 app.configure ->
     app.set 'views', __dirname + '/views'
     app.set 'quiet', true
     # use coffeekup for html markup
     app.set 'view engine', 'coffee'
-    app.register '.coffee', require('coffeekup').adapters.express
+    app.engine 'coffee', require('coffeecup').__express
     app.set 'view options', {
         layout: false
     }
@@ -33,10 +33,6 @@ app.configure ->
         dest: __dirname + '/public'
         compile: (str)->
             stylus(str).set 'compress', true
-
-    coffeeDir = __dirname + '/views'
-    publicDir = __dirname + '/public'
-    app.use express.compiler src: coffeeDir, dest: publicDir, enable: ['coffeescript']
 
     app.use express.logger()
     app.use app.router

@@ -6,7 +6,7 @@ html ->
         meta(name: 'description', content: @desc) if @desc?
         link rel: 'stylesheet', href: 'stylesheets/app.css'
         script src: 'js/jquery-1.9.1.min.js'
-        script src: 'js/coffeekup.js'
+        script src: 'js/coffeecup.js'
         script src: 'js/moment.min.js'
         script src: 'http://www.google.com/jsapi', type: 'text/javascript'
         script src: 'stats.js'
