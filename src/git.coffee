@@ -66,8 +66,9 @@ git = module.exports =
                         next()
     
     lastCommit: (callback) ->
-      exec "git log --pretty=format:'%h:::%s:::%ad' -n 1", (err,stdo,stderr) =>
-        p = "#{stdo}".replace(/(\n|\r)+$/, '').split(':::')
+      exec "git fetch && git rev-list --pretty=format:'%h::::%s::::%ad' -n1 origin/" + git.branch, (err, stdo, stderr) =>
+        commit = stdo.split(/(\n|\r)+/)
+        p = commit[2].split('::::')
         commit =
           sha: p[0]
           message: p[1]
