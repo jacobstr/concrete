@@ -8,15 +8,13 @@ git = require './git'
 moment = require 'moment'
 stats = require './stats'
 
-authorize = (user, pass) ->
-    user == git.user and pass == git.pass
-
-if git.user and git.pass
-    app = module.exports = express(express.basicAuth(authorize))
-else
-    app = module.exports = express()
+app = module.exports = express()
 
 app.configure ->
+    if git.user and git.pass
+        app.use express.basicAuth (user, pass) ->
+            user == git.user and pass == git.pass
+
     app.set 'views', __dirname + '/views'
     app.set 'quiet', true
     # use coffeekup for html markup
