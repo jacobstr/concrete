@@ -17,6 +17,7 @@ git = module.exports =
         branch: 'concrete.branch'
         user: 'concrete.user'
         pass: 'concrete.pass'
+        webhook: 'concrete.webhook'
 
     # init at target directory
     init: (target, callback) ->
@@ -44,6 +45,7 @@ git = module.exports =
                 process.exit 1
             getUser()
             getPass()
+            getWebhook()
             getBranch()
             getRunner()
 
@@ -78,19 +80,30 @@ git = module.exports =
     addNote: (sha, message) ->
       exec "git notes --ref=ci add -f -m \"#{message}\" #{sha}", (err,stdo,stderr) =>
         #swallow
+
+readStdout = (stdout) ->
+  stdout.toString().replace /[\s\r\n]+$/, ''
+
 getUser = ->
     exec 'git config --get ' + git.config.user, (error, stdout, stderr)=>
         if error?
             git.user = ''
         else
-            git.user = stdout.toString().replace /[\s\r\n]+$/, ''
+            git.user = readStdout stdout
 
 getPass = ->
     exec 'git config --get ' + git.config.pass, (error, stdout, stderr)=>
         if error?
             git.pass = ''
         else
-            git.pass = stdout.toString().replace /[\s\r\n]+$/, ''
+            git.pass = readStdout stdout
+
+getWebhook = ->
+    exec 'git config --get ' + git.config.webhook, (error, stdout, stderr)=>
+        if error?
+            git.webhook = '/webhook'
+        else
+            git.webhook = readStdout stdout
 
 # get the current working branch
 # fallback to master if git.config.branch isn't set
@@ -100,7 +113,7 @@ getBranch = ->
             git.branch = 'master'
             gitContinue()
         else
-            git.branch = stdout.toString().replace /[\s\r\n]+$/, ''
+            git.branch = readStdout stdout
             git.branch = 'master' if git.branch is ''
             gitContinue()
 
@@ -111,7 +124,7 @@ getRunner = ->
             console.log "Git.getRunner: #{error}".red
             process.exit 1
         else
-            git.runner = stdout.toString().replace /[\s\r\n]+$/, ''
+            git.runner = readStdout stdout
             git.runner = 'none' if git.runner is ''
             gitContinue()
 

@@ -28,6 +28,13 @@ Concrete is a minimalistic Continuous Integration server.
 ## Setting the branch
     git config --add concrete.branch deploy
 
+## Configuring GitHub Webhook
+You can have builds trigger automatically whenever a commit is pushed to GitHub
+via Webhooks. See your :repo:/settings/hooks and add the WebHook URL `/webhook`.
+
+You may configure the url via:
+    git config --add concrete.webhook '/webhook'
+
 ## Adding HTTP Basic authentication
     git config --add concrete.user username
     git config --add concrete.pass password
