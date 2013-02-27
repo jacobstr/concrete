@@ -11,16 +11,18 @@ ObjectID = mongo.BSONPure.ObjectID
 jobs = module.exports =
     current: null
     addJob: (next)->
-        db.collection 'jobs', (error, collection) ->
-            job =
-                addedTime: new Date().getTime()
-                log: ''
-                running: false
-                finished: false
-            git.lastCommit (commit) ->
-              job.commit = commit
-              collection.insert job, ->
-                next(job) if next?
+        # Make a global setting with a human name for argv._[0].
+        git.init argv._[0], ->
+          db.collection 'jobs', (error, collection) ->
+              job =
+                  addedTime: new Date().getTime()
+                  log: ''
+                  running: false
+                  finished: false
+              git.lastCommit (commit) ->
+                job.commit = commit
+                collection.insert job, ->
+                  next(job) if next?
 
     getQueued: (next)->
         getJobs {running: false}, next
