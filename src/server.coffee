@@ -103,7 +103,7 @@ app.get '/stats/number-of-tests', auth, (req,res) ->
   stats.numberOfTests (n) ->
     res.json n
 
-# Add a webhook to your github page. This should be made configurable.
+# Add a webhook to your github page to use this.
 app.post git.webhook, (req,res) ->
   console.log("GitHub webhook received.")
   jobs.addJob (job)->
